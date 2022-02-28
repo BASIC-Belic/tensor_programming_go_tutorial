@@ -1,6 +1,3 @@
-# ignore binaries but not .go and html files 
+# ignore binaries  
 
-**/*  
-!**/*.go
-!**/*.html
-!.gitignore 
+main
