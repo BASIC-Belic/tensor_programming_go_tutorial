@@ -61,7 +61,7 @@ func LinkReader(resp *http.Response, depth int) []Link {
 
 		if start != nil && token.Type == html.TextToken {
 			// print out the curr link 
-			text = fmt.Sprintf("%S%S", text, token.Data)
+			text = fmt.Sprintf("%s%s", text, token.Data)
 		}
 
 		// Atom.A = 0x1 integer code that maps to a specific HTML string
