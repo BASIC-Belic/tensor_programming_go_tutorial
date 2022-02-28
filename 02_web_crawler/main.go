@@ -7,6 +7,7 @@ package main
  * https://www.sneppets.com/golang/cannot-refer-unexported-name-undefined-error-go/ 
  * https://stackoverflow.com/questions/51642410/chaincode-not-building-go-program-error-cannot-refer-to-unexported-name
  * fix: changed outdated method name in tutorial https://github.com/llimllib/loglevel/blob/master/log.go
+ * Understanding go.mod and go.sum https://faun.pub/understanding-go-mod-and-go-sum-5fd7ec9bcc34
  */
 import (
 	"fmt"
