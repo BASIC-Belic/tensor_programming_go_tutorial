@@ -1,3 +1,4 @@
-# ignore binaries  
+# ignore binaries and temp .txt files  
 
 main
+**/*.txt
