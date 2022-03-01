@@ -17,6 +17,7 @@ import (
 	"golang.org/x/net/html/atom" // to break down html down into atoms
 	"strings"
 	log "github.com/llimllib/loglevel" // log level package to help build a log for err handling
+	// "io/ioutil" // writes data to file https://pkg.go.dev/io/ioutil#WriteFile
 )
 
 /* Program pull all links in html body and display to console and output to a console 
@@ -99,6 +100,53 @@ func LinkReader(resp *http.Response, depth int) []Link {
 	return links
 }
 
+/* Purpose: additional function outside of tutorial to read the links to a file
+ * Input: []Link https://appliedgo.net/slices/
+ * Output: nil
+ */
+func LinkWriter(links []Link)  {
+
+	file, err := os.Create("./temp.txt")
+
+	if err != nil {
+		log.Error(err)
+		return
+	}
+
+	// close file out on exit and abort if unexpected error occurs 
+	// https://yourbasic.org/golang/defer/
+	// https://gobyexample.com/panic
+	// https://www.baeldung.com/linux/status-codes
+	defer func() { 
+		// below is the same as: 
+	 	// err := file.Close
+	 	// if err != nil { }
+	 	if err := file.Close; err != nil {
+	 		panic(err)
+	 	}
+	 }()
+
+	// Take the string for each link and put it into a byte buffer and then output that byte buffer
+	// blank identifier for index since it would be unused in this loop  
+	// More on writing to files: https://golangbyexample.com/write-to-a-file-go/ 
+	// and https://thedeveloperblog.com/go/bytes-buffer-go 
+	// and https://siongui.github.io/2017/01/30/go-insert-line-or-string-to-file/
+	// TODO: fix exit status code 2 after /s/website-issue
+	for _, link := range links {
+
+		// write a chunk of data 
+		buffyData := [] byte(link.url + "\n")
+
+		// file.WriteString(link.url + "\n")
+		_, err2 := file.Write(buffyData)
+		
+		if err2 != nil { 
+			panic(err2)
+		}
+	}
+
+}
+
 /* Purpose: Create new Link 
  * Input: tag<html.Token>; text<str>; depth<int>
  * Output: Link 
@@ -167,11 +215,19 @@ func recurDownloader(url string, depth int) {
 		log.Error(err)
 		return
 	}
+
 	links := LinkReader(page, depth)
 
+	// write links to file 
+	LinkWriter(links)
+
 	// blank identifier: avoids having to declare all the variables for the returns values https://go.dev/doc/effective_go#blank
+	// recursively download links
 	for _, link := range links {
+
+		// print link
 		fmt.Println(link)
+
 		if depth + 1 < maxDepth {
 			// recursive call, incrementing depth by 1 
 			recurDownloader(link.url, depth + 1)
